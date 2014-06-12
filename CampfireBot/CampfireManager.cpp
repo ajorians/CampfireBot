@@ -246,8 +246,7 @@ void CampfireManager::DoQueuedMessages()
             }
          }
 
-         Rejoin("testwith", "534c7a1597bfb3c862de90f69310a8ad1a1eda04", msg.m_strRoom, true);
-         //Rejoin("camtasiaslate", "0c2f691569082638c0469f52dabfa5a0fdb29b6e", msg.m_strRoom, true);
+         Rejoin(CAMPFIRE_CAMP, CAMPFIRE_AUTH, msg.m_strRoom, CAMPFIRE_USESSL);
       }
       else if( msg.m_eType == CampfireQueuedMessage::LeaveRoom )
       {

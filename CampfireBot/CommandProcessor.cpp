@@ -64,8 +64,7 @@ void CommandProcessor::Run()
          string strRoomName = Trim(strCommand.substr(4));
 
          //cout << "Joining room..." << endl;
-         m_pConnectionManager->JoinRoom("testwith", "534c7a1597bfb3c862de90f69310a8ad1a1eda04", strRoomName, true);
-         //m_pConnectionManager->JoinRoom("camtasiaslate", "0c2f691569082638c0469f52dabfa5a0fdb29b6e", strRoomName, true);
+         m_pConnectionManager->JoinRoom(CAMPFIRE_CAMP, CAMPFIRE_AUTH, strRoomName, CAMPFIRE_USESSL);
       }
 
       else if( IsLeaveCommand(strCommand) )
