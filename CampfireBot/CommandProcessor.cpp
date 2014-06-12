@@ -2,6 +2,9 @@
 #include <iostream>
 #include <algorithm>
 #include "ConnectionManager.h"
+#ifdef _WIN32
+#include <conio.h>
+#endif
 
 using namespace std;
 
@@ -36,7 +39,41 @@ void CommandProcessor::Run()
    {
       cout << "> ";
       std::string strCommand;
+#ifdef _WIN32
+      while (1){
+         if ( kbhit() )
+         {
+            char key_code = getch();
+            if( key_code == '\r')
+            {
+               cout << endl;
+               break;
+            }
+            else if( key_code == '\b' )
+            {
+               cout << key_code;
+               if( strCommand.length() > 0)
+                  strCommand = strCommand.substr(0, strCommand.length()-1);
+            }
+            else
+            {
+               cout << key_code;
+               strCommand.append(1, key_code);
+            }
+         }
+         else
+         {
+            std::string strResponse;
+            if( m_pConnectionManager->GetResponce(strResponse) )
+            {
+               cout << strResponse;
+               cout << "> ";
+            }
+         }
+      }
+#else
       getline(cin, strCommand);
+#endif
 
       if( IsExitCommand(strCommand) )
       {
@@ -90,6 +127,14 @@ void CommandProcessor::Run()
          m_pConnectionManager->Say(strRoom, strMessage);
       }
 
+#ifndef _WIN32
+      std::string strResponse;
+      if( m_pConnectionManager->GetResponce(strResponse) )
+      {
+         cout << strResponse;
+         cout << "> ";
+      }
+#endif
    }
 }
 

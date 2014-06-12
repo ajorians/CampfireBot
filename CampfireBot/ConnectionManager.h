@@ -53,6 +53,8 @@ public:
    bool ChangeUpdateFrequency(int nMS);
    bool StartTrelloUpdate(const std::string& strRoom);
 
+   bool GetResponce(std::string& strResponse);
+
 public:
    struct QueuedMessage
    {
@@ -92,6 +94,9 @@ protected:
    bool m_bExit;
 
    std::vector<QueuedMessage> m_arrQueuedMessages;
+
+   pthread_mutex_t m_mutexResponses;
+   std::vector<std::string> m_arrResponses;
 
    std::vector<RLibrary*> m_arrChatHandlers;
    CampfireManager* m_pCampfireManager;

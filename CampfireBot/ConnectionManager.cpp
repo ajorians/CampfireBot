@@ -25,11 +25,13 @@ ConnectionManager::ConnectionManager()
 : 
 #ifdef WIN32
 m_mutex(PTHREAD_MUTEX_INITIALIZER),
+m_mutexResponses(PTHREAD_MUTEX_INITIALIZER),
 #endif
 m_bExit(false)
 {
 #ifndef WIN32
    pthread_mutex_init(&m_mutex, NULL);
+   pthread_mutex_init(&m_mutexResponses, NULL);
 #endif
    int iRet;
    iRet = pthread_create( &m_thread, NULL, ConnectionManager::ConnectionManagerThread, (void*)this);
@@ -218,6 +220,22 @@ bool ConnectionManager::StartTrelloUpdate(const std::string& strRoom)
 
 }
 
+bool ConnectionManager::GetResponce(std::string& strResponse)
+{
+   bool bOK = false;
+
+   pthread_mutex_lock( &m_mutexResponses );
+   if( m_arrResponses.size() > 0 )
+   {
+      strResponse = m_arrResponses[0];
+      m_arrResponses.erase(m_arrResponses.begin());
+      bOK = true;
+   }
+   pthread_mutex_unlock( &m_mutexResponses );
+
+   return bOK;
+}
+
 void* ConnectionManager::ConnectionManagerThread(void* ptr)
 {
    ConnectionManager* pThis = (ConnectionManager*)ptr;
@@ -303,7 +321,10 @@ void ConnectionManager::DoQueuedMessages()
             strMessage += m_arrChatHandlers[i]->GetFullPath();
             strMessage += "\n";
          }
-         std::cout << strMessage;
+
+         pthread_mutex_lock( &m_mutexResponses );
+         m_arrResponses.push_back(strMessage);
+         pthread_mutex_unlock( &m_mutexResponses );
       }
       else if( msg.m_eType == QueuedMessage::ReloadHandlers )
       {
@@ -437,5 +458,7 @@ void ConnectionManager::NotifyHandlers(const std::string& strRoom, const std::st
       Adjust(this, strRoom.c_str(), strName.c_str(), strListBefore.c_str(), strListAfter.c_str(), strDescription.c_str(), bCreated ? 1 : 0, bClosed ? 1 : 0);
    }
 }
+
+
 
 
