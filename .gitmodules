@@ -1,0 +1,3 @@
+[submodule "CampfireAPI"]
+	path = CampfireAPI
+	url = https://github.com/ajorians/CampfireAPI
