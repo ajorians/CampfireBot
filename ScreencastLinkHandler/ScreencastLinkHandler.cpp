@@ -2,6 +2,8 @@
 #include "HandlerAPI.h"
 #include <sstream>
 #include <algorithm>//For std::transform
+#include <stdlib.h>
+#include <cstring>
 
 int StringToInt(const std::string& str)
 {

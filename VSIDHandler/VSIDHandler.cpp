@@ -1,6 +1,8 @@
 #include "VSIDHandler.h"
 #include "HandlerAPI.h"
 #include <sstream>
+#include <stdlib.h>
+#include <cstring>
 
 int StringToInt(const std::string& str)
 {

@@ -1,6 +1,7 @@
 #include "TimedRestart.h"
 #include "HandlerAPI.h"
 #include <sstream>
+#include <stdlib.h>
 
 #include <stdio.h>
 #include <time.h>
