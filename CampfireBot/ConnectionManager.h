@@ -36,6 +36,7 @@ public:
    //Commands
    void Exit();
    bool ReloadChatHandlers();
+   bool ListChatHandlers();
    bool JoinRoom(const std::string& strCamp, const std::string& strAuth, const std::string& strRoom, bool bSSL);
    bool LeaveRoom(const std::string& strRoom);
    bool Say(const std::string& strRoom, const std::string& strMessage);
@@ -45,7 +46,7 @@ public:
 public:
    struct QueuedMessage
    {
-      enum MessageType { SayMessage, RestartCamp, RestartTrello, ReloadHandlers, AdjustUpdateFrequency, TrelloSubscribe, TrelloUnSubscribe, LeaveRoom };
+      enum MessageType { SayMessage, RestartCamp, RestartTrello, ReloadHandlers, ListHandlers, AdjustUpdateFrequency, TrelloSubscribe, TrelloUnSubscribe, LeaveRoom };
 
       MessageType m_eType;
       std::string m_strRoom;

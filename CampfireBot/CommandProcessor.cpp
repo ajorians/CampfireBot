@@ -54,6 +54,11 @@ void CommandProcessor::Run()
          m_pConnectionManager->ReloadChatHandlers();
       }
 
+      else if( IsListHandersCommand(strCommand) )
+      {
+         m_pConnectionManager->ListChatHandlers();
+      }
+
       else if( IsJoinCommand(strCommand) )
       {
          string strRoomName = Trim(strCommand.substr(4));
@@ -86,33 +91,6 @@ void CommandProcessor::Run()
          m_pConnectionManager->Say(strRoom, strMessage);
       }
 
-      else if( IsUpdateFrequencyCommand(strCommand) )
-      {
-         string strFreqency = strCommand.substr(16);
-         if( strFreqency.length() > 0 )
-         {
-            int nFrequencyMS = StringToInt(strFreqency);
-            if( nFrequencyMS > 0 )
-            {
-               m_pConnectionManager->ChangeUpdateFrequency(nFrequencyMS);
-
-               cout << "Updated frequency: " << nFrequencyMS << endl;
-            }
-         }
-      }
-
-      else if( IsStartTrelloCommand(strCommand) )
-      {
-         string::size_type nPos = strCommand.find_first_of(';');
-         if( nPos == string::npos )
-            return;
-
-         string strRoom = Trim(strCommand.substr(nPos+1));
-
-         m_pConnectionManager->StartTrelloUpdate(strRoom);
-
-      }
-
    }
 }
 
@@ -131,6 +109,11 @@ bool CommandProcessor::IsReloadHandlersCommand(const std::string& strCommand) co
    return ToLower(strCommand) == "reload";
 }
 
+bool CommandProcessor::IsListHandersCommand(const std::string& strCommand) const
+{
+   return ToLower(strCommand) == "listhandlers";
+}
+
 bool CommandProcessor::IsJoinCommand(const std::string& strCommand) const
 {
    return ToLower(strCommand).find("join") == 0;
@@ -146,16 +129,6 @@ bool CommandProcessor::IsSayCommand(const std::string& strCommand) const
    return ToLower(strCommand).find("say ") == 0;
 }
 
-bool CommandProcessor::IsUpdateFrequencyCommand(const std::string& strCommand) const
-{
-   return ToLower(strCommand).find("update frequency ") == 0;
-}
-
-bool CommandProcessor::IsStartTrelloCommand(const std::string& strCommand) const
-{
-   return ToLower(strCommand).find("start trello") == 0;
-}
-
 std::string CommandProcessor::ToLower(const std::string& strCommand)
 {
    std::string strReturn(strCommand);
@@ -169,11 +142,10 @@ void CommandProcessor::DisplayHelp()
    cout << "Available commands:" << endl;
    cout << "Help - This help" << endl;
    cout << "Reload - Reloads the chat handlers" << endl;
+   cout << "ListHandlers - Lists the chat handlers" << endl;
    cout << "Join <RoomName> - Joins a campfire room" << endl;
    cout << "Leave <RoomName> - Leaves a campfire room" << endl;
    cout << "Say <RoomName>;<text> - Say something" << endl;
-   cout << "Update Frequency <MS> -- Change the listen rate" << endl;
-   cout << "Start Trello;<RoomName> -- Starts listening for Trello updates" << endl;
    cout << "Exit - Closes the program" << endl;
 }
 

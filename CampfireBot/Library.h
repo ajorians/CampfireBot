@@ -16,6 +16,7 @@ public:
 
 	bool Load();
 	void* Resolve(const char* pstrExport);
+   std::string GetFullPath() const;
 
 protected:
 	std::string m_strFilename;

@@ -149,6 +149,18 @@ bool ConnectionManager::ReloadChatHandlers()
    return bRet;
 }
 
+bool ConnectionManager::ListChatHandlers()
+{
+   QueuedMessage msg;
+   msg.m_eType = QueuedMessage::ListHandlers;
+
+   pthread_mutex_lock( &m_mutex );
+   m_arrQueuedMessages.push_back(msg);
+   pthread_mutex_unlock( &m_mutex );
+
+   return true;
+}
+
 bool ConnectionManager::JoinRoom(const std::string& strCamp, const std::string& strAuth, const std::string& strRoom, bool bSSL)
 {
    bool bOK = false;
@@ -282,6 +294,16 @@ void ConnectionManager::DoQueuedMessages()
       else if( msg.m_eType == QueuedMessage::AdjustUpdateFrequency )
       {
          m_pCampfireManager->ChangeUpdateFrequency(msg.m_nAmount);
+      }
+      else if( msg.m_eType == QueuedMessage::ListHandlers )
+      {
+         std::string strMessage = "Handlers:\n";
+         for(std::vector<RLibrary*>::size_type i=0; i<m_arrChatHandlers.size(); i++)
+         {
+            strMessage += m_arrChatHandlers[i]->GetFullPath();
+            strMessage += "\n";
+         }
+         std::cout << strMessage;
       }
       else if( msg.m_eType == QueuedMessage::ReloadHandlers )
       {

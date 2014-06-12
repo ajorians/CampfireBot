@@ -33,5 +33,10 @@ void* RLibrary::Resolve(const char* pstrExport)
 	return ptrRet;
 }
 
+std::string RLibrary::GetFullPath() const
+{
+   return m_strFilename;
+}
+
 
 
