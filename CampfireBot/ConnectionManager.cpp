@@ -27,7 +27,7 @@ ConnectionManager::ConnectionManager()
 m_mutex(PTHREAD_MUTEX_INITIALIZER),
 m_mutexResponses(PTHREAD_MUTEX_INITIALIZER),
 #endif
-m_bExit(false)
+m_bExit(false), m_bDebugCampfireMessages(false)
 {
 #ifndef WIN32
    pthread_mutex_init(&m_mutex, NULL);
@@ -115,6 +115,14 @@ void ConnectionManager::MessageSaid(const std::string& strRoom, int nType, int n
    NotifyHandlers(strRoom, nType, nUserID, strMessage);
 
    pthread_mutex_unlock( &m_mutex );
+
+   if( m_bDebugCampfireMessages )
+   {
+      pthread_mutex_lock(&m_mutexResponses);
+      std::string strCampfireMessage = "Camp: " + strMessage;
+      m_arrResponses.push_back(strCampfireMessage);
+      pthread_mutex_unlock(&m_mutexResponses);
+   }
 }
 
 void ConnectionManager::TelloUpdate(const std::string& strRoom, const std::string& strName, const std::string& strListBefore, const std::string& strListAfter, const std::string& strDescription, bool bCreated, bool bClosed)
@@ -161,6 +169,24 @@ bool ConnectionManager::ListChatHandlers()
    pthread_mutex_unlock( &m_mutex );
 
    return true;
+}
+
+void ConnectionManager::ToggleDebugMessages()
+{
+   m_bDebugCampfireMessages = !m_bDebugCampfireMessages;
+
+   pthread_mutex_lock( &m_mutexResponses );
+   std::string strMsg = "Debug is ";
+   if( m_bDebugCampfireMessages )
+   {
+      strMsg += "ON";
+   }
+   else
+   {
+      strMsg += "OFF";
+   }
+   m_arrResponses.push_back(strMsg);
+   pthread_mutex_unlock( &m_mutexResponses );
 }
 
 bool ConnectionManager::JoinRoom(const std::string& strCamp, const std::string& strAuth, const std::string& strRoom, bool bSSL)

@@ -47,6 +47,7 @@ public:
    void Exit();
    bool ReloadChatHandlers();
    bool ListChatHandlers();
+   void ToggleDebugMessages();
    bool JoinRoom(const std::string& strCamp, const std::string& strAuth, const std::string& strRoom, bool bSSL);
    bool LeaveRoom(const std::string& strRoom);
    bool Say(const std::string& strRoom, const std::string& strMessage);
@@ -97,6 +98,7 @@ protected:
 
    pthread_mutex_t m_mutexResponses;
    std::vector<std::string> m_arrResponses;
+   bool m_bDebugCampfireMessages;
 
    std::vector<RLibrary*> m_arrChatHandlers;
    CampfireManager* m_pCampfireManager;

@@ -96,6 +96,11 @@ void CommandProcessor::Run()
          m_pConnectionManager->ListChatHandlers();
       }
 
+      else if( IsDebugMessagesCommand(strCommand) )
+      {
+         m_pConnectionManager->ToggleDebugMessages();
+      }
+
       else if( IsJoinCommand(strCommand) )
       {
          string strRoomName = Trim(strCommand.substr(4));
@@ -158,6 +163,11 @@ bool CommandProcessor::IsListHandersCommand(const std::string& strCommand) const
    return ToLower(strCommand) == "listhandlers";
 }
 
+bool CommandProcessor::IsDebugMessagesCommand(const std::string& strCommand) const
+{
+   return ToLower(strCommand) == "debugmessages";
+}
+
 bool CommandProcessor::IsJoinCommand(const std::string& strCommand) const
 {
    return ToLower(strCommand).find("join") == 0;
@@ -187,6 +197,7 @@ void CommandProcessor::DisplayHelp()
    cout << "Help - This help" << endl;
    cout << "Reload - Reloads the chat handlers" << endl;
    cout << "ListHandlers - Lists the chat handlers" << endl;
+   cout << "DebugMessages - Toggle displaying messages" << endl;
    cout << "Join <RoomName> - Joins a campfire room" << endl;
    cout << "Leave <RoomName> - Leaves a campfire room" << endl;
    cout << "Say <RoomName>;<text> - Say something" << endl;
