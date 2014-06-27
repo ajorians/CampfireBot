@@ -8,13 +8,13 @@
 #include "Library.h"
 
 #if 1
-#define CAMPFIRE_CAMP   "testwith"
-#define CAMPFIRE_AUTH   "534c7a1597bfb3c862de90f69310a8ad1a1eda04"
+//#define CAMPFIRE_CAMP   "testwith"
+//#define CAMPFIRE_AUTH   "534c7a1597bfb3c862de90f69310a8ad1a1eda04"
+//#define CAMPFIRE_USESSL true
+//#else
+#define CAMPFIRE_CAMP   "camtasiaslate"
+#define CAMPFIRE_AUTH   "0c2f691569082638c0469f52dabfa5a0fdb29b6e"
 #define CAMPFIRE_USESSL true
-#else
-camtasiaslate
-0c2f691569082638c0469f52dabfa5a0fdb29b6e
-true
 #endif
 
 class RLibrary;
