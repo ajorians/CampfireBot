@@ -7,7 +7,7 @@
 #include "HandlerAPI.h"
 #include "Library.h"
 
-#if 1
+//#if 1
 //#define CAMPFIRE_CAMP   "testwith"
 //#define CAMPFIRE_AUTH   "534c7a1597bfb3c862de90f69310a8ad1a1eda04"
 //#define CAMPFIRE_USESSL true
@@ -15,7 +15,7 @@
 #define CAMPFIRE_CAMP   "camtasiaslate"
 #define CAMPFIRE_AUTH   "0c2f691569082638c0469f52dabfa5a0fdb29b6e"
 #define CAMPFIRE_USESSL true
-#endif
+//#endif
 
 class RLibrary;
 class CampfireManager;
@@ -38,6 +38,7 @@ public:
    void RestartCampfire(const char* pstrRoom);
    void TrelloSubscribe(const char* pstrRoom, const char* pstrBoard, const char* pstrToken);
    void TrelloUnSubscribe(const char* pstrRoom, const char* pstrBoard);
+   void UploadMessage(const char* pstrRoom, const char* pstrFile, bool bDelete);
 
    //IManager
    void MessageSaid(const std::string& strRoom, int nType, int nUserID, const std::string& strMessage);
@@ -59,7 +60,7 @@ public:
 public:
    struct QueuedMessage
    {
-      enum MessageType { SayMessage, RestartCamp, RestartTrello, ReloadHandlers, ListHandlers, AdjustUpdateFrequency, TrelloSubscribe, TrelloUnSubscribe, LeaveRoom };
+      enum MessageType { SayMessage, UploadFile, RestartCamp, RestartTrello, ReloadHandlers, ListHandlers, AdjustUpdateFrequency, TrelloSubscribe, TrelloUnSubscribe, LeaveRoom };
 
       MessageType m_eType;
       std::string m_strRoom;

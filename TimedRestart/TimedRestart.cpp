@@ -47,20 +47,6 @@ std::string UnEscapeXML(const std::string str)
    return strReturn;
 }
 
-//HANDLER_EXTERN int CampfireCreate(CampfireAPI* api)
-//{
-//	*api = new Campfire;
-//
-//	return 0;
-//}
-//
-//HANDLER_EXTERN int CampfireFree(CampfireAPI *api)
-//{
-//	Campfire* pCampfire = (Campfire*)*api;
-//	delete pCampfire;
-//	return 0;
-//}
-
 HANDLER_EXTERN int HandlerMessageSaid(void* pICampfireManager, const char* pstrRoom, int nType, int nUserID, const char* pstrMessage)
 {
    return 0;

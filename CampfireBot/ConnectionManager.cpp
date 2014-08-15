@@ -56,6 +56,7 @@ void ConnectionManager::SayMessage(const char* pstrRoom, const char* pstrMessage
    m_arrQueuedMessages.push_back(msg);
 }
 
+
 void ConnectionManager::RestartCampfire(const char* pstrRoom)
 {
    std::string strRoom(pstrRoom);
@@ -104,6 +105,19 @@ void ConnectionManager::TrelloUnSubscribe(const char* pstrRoom, const char* pstr
    msg2.m_strRoom = strRoom;
    msg2.m_strMessage = "UnSubscribing from Trello board: " + strBoard;
    m_arrQueuedMessages.push_back(msg2);
+}
+
+void ConnectionManager::UploadMessage(const char* pstrRoom, const char* pstrFile, bool bDelete)
+{
+   std::string strRoom(pstrRoom), strFile(pstrFile);
+
+   QueuedMessage msg;
+   msg.m_eType = QueuedMessage::UploadFile;
+   msg.m_strRoom = strRoom;
+   msg.m_strMessage = strFile;
+   msg.m_nAmount = bDelete ? 1 : 0;
+
+   m_arrQueuedMessages.push_back(msg);
 }
 
 void ConnectionManager::MessageSaid(const std::string& strRoom, int nType, int nUserID, const std::string& strMessage)
@@ -334,6 +348,10 @@ void ConnectionManager::DoQueuedMessages()
       else if( msg.m_eType == QueuedMessage::SayMessage )
       {
          m_pCampfireManager->Say(msg.m_strRoom, msg.m_strMessage);
+      }
+      else if( msg.m_eType == QueuedMessage::UploadFile )
+      {
+         m_pCampfireManager->Upload(msg.m_strRoom, msg.m_strMessage, msg.m_nAmount == 1 ? true : false);
       }
       else if( msg.m_eType == QueuedMessage::AdjustUpdateFrequency )
       {

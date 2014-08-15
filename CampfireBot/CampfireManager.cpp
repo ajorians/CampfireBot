@@ -141,6 +141,22 @@ bool CampfireManager::Say(const std::string& strRoom, const std::string& strMess
    return true;
 }
 
+bool CampfireManager::Upload(const std::string& strRoom, const std::string& strFile, bool bDelete)
+{
+   CampfireQueuedMessage msg;
+   msg.m_eType = CampfireQueuedMessage::UploadFile;
+   msg.m_strRoom = strRoom;
+   msg.m_strMessage = strFile;
+   if( bDelete )
+      msg.m_strPassword = "Delete";
+
+   pthread_mutex_lock( &m_mutex );
+   m_arrQueuedMessages.push_back(msg);
+   pthread_mutex_unlock( &m_mutex );
+
+   return true;
+}
+
 bool CampfireManager::ChangeUpdateFrequency(int nMS)
 {
    pthread_mutex_lock( &m_mutex );
@@ -222,6 +238,34 @@ void CampfireManager::DoQueuedMessages()
                      continue;
 
                   Say(m_arrCampfireInstances[i], strTemp.c_str(), nMessageID);
+               }
+            }
+         }
+      }
+      else if( msg.m_eType == CampfireQueuedMessage::UploadFile )
+      {
+         if( m_arrCampfireInstances.size() >= 1 )
+         {
+            CampfireUploadFileFunc Upload = (CampfireUploadFileFunc)m_libraryCampfire.Resolve("CampfireUploadFile");
+            if( Upload )
+            {
+               std::string strFile = msg.m_strMessage;
+               int nMessageID = -1;
+               for(std::vector<CampfireAPI>::size_type i=0; i<m_arrCampfireInstances.size(); i++)
+               {
+                  if( m_arrCampfireLoginInfo[i].m_strRoom != msg.m_strRoom )
+                     continue;
+
+                  Upload(m_arrCampfireInstances[i], strFile.c_str());
+
+                  if( msg.m_strPassword == "Delete" )
+                  {
+#ifdef _WIN32
+                     DeleteFileA(strFile.c_str());
+#else
+                     unlink(strFile.c_str());
+#endif
+                  }
                }
             }
          }

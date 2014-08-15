@@ -33,6 +33,7 @@ public:
    bool JoinRoom(const std::string& strCamp, const std::string& strAuth, const std::string& strRoom, bool bSSL);
    bool LeaveRoom(const std::string& strRoom);
    bool Say(const std::string& strRoom, const std::string& strMessage);
+   bool Upload(const std::string& strRoom, const std::string& strFile, bool bDelete);
    bool ChangeUpdateFrequency(int nMS);
 
    //Notify Commands
@@ -43,7 +44,7 @@ public:
 public:
    struct CampfireQueuedMessage
    {
-      enum MessageType { SayMessage, RestartCamp, LeaveRoom };
+      enum MessageType { SayMessage, UploadFile, RestartCamp, LeaveRoom };
 
       MessageType m_eType;
       std::string m_strMessage;
