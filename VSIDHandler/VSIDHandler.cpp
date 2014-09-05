@@ -169,7 +169,7 @@ std::string VSIDHandler::GetResponseForVSID(int nID)
    curl_easy_setopt(m_pCurl, CURLOPT_URL, strAddress.c_str());
 
    curl_easy_setopt(m_pCurl, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
-   std::string strUserPasswd = "a.orians:1Ssmajjmd";
+   std::string strUserPasswd = "a.orians:Aa2.718281828";
    curl_easy_setopt(m_pCurl, CURLOPT_USERPWD, strUserPasswd.c_str());
 
    m_strWrite.clear();
